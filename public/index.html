@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digit Guesser</title>
+  <link rel="stylesheet" href="/main.css" />
+</head>
+
+<body>
+  <div class="row">
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          <canvas class="canvas" width="435" height="435"></canvas>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col result">
+          <output class="answer">No answer</output>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row">
+        <fieldset class="col inputs">
+          <legend>Input</legend>
+          <label>
+            <input type="radio" class="input" name="input" /> Digit 0
+            <span class="counter">0x</span>
+          </label>
+          <label>
+            <input type="radio" class="input" name="input" /> Digit 1
+            <span class="counter">0x</span>
+          </label>
+          <label>
+            <input type="radio" class="input" name="input" /> Digit 2
+            <span class="counter">0x</span>
+          </label>
+          <label>
+            <input type="radio" class="input" name="input" /> Digit 3
+            <span class="counter">0x</span>
+          </label>
+          <label>
+            <input type="radio" class="input" name="input" /> Digit 4
+            <span class="counter">0x</span>
+          </label>
+          <label>
+            <input type="radio" class="input" name="input" /> Digit 5
+            <span class="counter">0x</span>
+          </label>
+        </fieldset>
+      </div>
+      <div class="row">
+        <fieldset class="col outputs">
+          <legend>Output</legend>
+          <label>
+            Digit 0: <output class="output">0</output>
+          </label>
+          <label>
+            Digit 1: <output class="output">0</output>
+          </label>
+          <label>
+            Digit 2: <output class="output">0</output>
+          </label>
+          <label>
+            Digit 3: <output class="output">0</output>
+          </label>
+          <label>
+            Digit 4: <output class="output">0</output>
+          </label>
+          <label>
+            Digit 5: <output class="output">0</output>
+          </label>
+        </fieldset>
+      </div>
+      <div class="row">
+        <fieldset class="col actions">
+          <legend>Actions</legend>
+          <button class="predict">Predict</button>
+          <button class="train">Train</button>
+          <button class="clear">Clear</button>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <script src="/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+{
+  "name": "digit-guesser",
+  "version": "0.0.0",
+  "description": "A small experiment with neural networks.",
+  "license": "MIT",
+  "private": true,
+  "author": {
+    "name": "Silas B. Domingos",
+    "url": "https://github.com/balmanth"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balmanth/digit-guesser.git"
+  },
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "npm run build",
+    "serve": "webpack serve",
+    "clean": "tsc --build --clean ./tsconfig.json",
+    "build": "webpack --mode production --devtool hidden-source-map"
+  },
+  "devDependencies": {
+    "prettier": "^2.5.1",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.4",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.1",
+    "worker-loader": "^3.0.8"
+  }
+}

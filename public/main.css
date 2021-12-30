@@ -1,0 +1,93 @@
+body {
+  margin: 0;
+  padding: 1rem;
+  font-size: 14px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+label {
+  display: block;
+}
+
+fieldset {
+  margin: 0;
+  border: 1px solid rgb(200, 200, 200);
+}
+
+button {
+  margin: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid rgb(200, 200, 200);
+  background-color: rgb(240, 240, 240);
+}
+
+button:hover {
+  border-color: rgb(180, 180, 180);
+  background-color: rgb(225, 225, 225);
+}
+
+button:active {
+  border-color: rgb(170, 170, 170);
+  background-color: rgb(210, 210, 210);
+}
+
+button:focus {
+  outline: none;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex: none;
+}
+
+.row > .col {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+}
+
+.inputs,
+.outputs,
+.actions {
+  padding: 0.5rem;
+  width: 8rem;
+}
+
+.result {
+  padding: 0 0.5rem;
+  width: calc(400px - 1rem);
+  font-size: 2rem;
+  color: rgb(150, 150, 150);
+}
+
+.canvas {
+  margin: 0.5rem;
+}
+
+.inputs .counter {
+  display: inline-block;
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-align: right;
+  width: 3.5rem;
+}
+
+.outputs output {
+  display: inline-block;
+  font-weight: 500;
+  text-align: right;
+  width: 5rem;
+}
+
+.outputs output.high {
+  color: rgb(100, 180, 2);
+}
+
+.outputs output.medium {
+  color: rgb(200, 180, 0);
+}
+
+.outputs output.low {
+  color: rgb(200, 0, 0);
+}
