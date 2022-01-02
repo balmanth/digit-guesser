@@ -24,7 +24,7 @@ export class Matrix {
    * @returns Returns the corresponding offset.
    */
   static getOffset(matrix: Matrix, row: number, column: number): number {
-    return row * matrix.columns + column;
+    return row * matrix.#columns + column;
   }
 
   /**
@@ -67,7 +67,7 @@ export class Matrix {
    * Get the matrix size.
    */
   get size(): number {
-    return this.#rows * this.columns;
+    return this.#rows * this.#columns;
   }
 
   /**
