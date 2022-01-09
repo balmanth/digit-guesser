@@ -1,9 +1,9 @@
-import { NeuralNetwork } from '../neural';
+import { NeuralNetwork } from '../neural/network';
 import { Worker } from '../core/worker';
 
 export default null as any;
 
-const neural = new NeuralNetwork([225, 120, 60, 6]);
+const neural = NeuralNetwork.fromRandom([225, 120, 60, 6]);
 const worker = new Worker(self);
 
 /**
