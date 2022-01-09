@@ -1,6 +1,6 @@
 import { NeuralNetwork } from '../neural/network';
-import { Worker } from '../core/worker';
 import { NeuralSigmoidFunction } from '../neural/functions/sigmoid';
+import { Worker } from '../core/worker';
 
 export default null as any;
 
