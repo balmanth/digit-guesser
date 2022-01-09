@@ -1,5 +1,5 @@
 import { getAllElements, getElement } from './core/elements';
-import { Worker, WorkerValueTypes } from './core/worker';
+import { Worker } from './core/worker';
 import { Canvas } from './core/canvas';
 
 import NeuralWorker from './workers/neural.worker';
@@ -15,6 +15,17 @@ const inputElements = getAllElements<HTMLInputElement>('.input');
 const counterElements = getAllElements<HTMLSpanElement>('.counter');
 const outputElements = getAllElements<HTMLOutputElement>('.output');
 const answerOutput = getElement<HTMLOutputElement>('.answer');
+
+/**
+ * Enable or disable all the control buttons.
+ * @param state Controls state.
+ */
+const enableControls = (state: boolean): void => {
+  inputElements.forEach((input) => (input.disabled = !state));
+  predictButton.disabled = !state;
+  trainButton.disabled = !state;
+  clearButton.disabled = !state;
+};
 
 /**
  * Update all counting elements in the UI.
@@ -63,24 +74,27 @@ const updateAnswer = (output: number[]): void => {
 /**
  * Register the predict action button.
  */
-predictButton.addEventListener('click', () => {
+predictButton.addEventListener('click', async (): Promise<void> => {
   console.log('Predicting...');
-  worker.emit('predict', canvas.data);
+  enableControls(false);
+  const [outputs] = (await worker.emit('predict', canvas.data)) as [number[]];
+  enableControls(true);
+  updateOutputs(outputs);
+  updateAnswer(outputs);
+  console.log('Done!');
 });
 
 /**
  * Register the train action button.
  */
-trainButton.addEventListener('click', () => {
+trainButton.addEventListener('click', async (): Promise<void> => {
   console.log('Training...');
-  const expected = inputElements.map((input, index) => {
-    if (input.checked) {
-      counters[index]++;
-      return 1;
-    }
-    return 0;
-  });
-  worker.emit('train', canvas.data, expected);
+  enableControls(false);
+  const expected = inputElements.map((input, index) => (input.checked ? (counters[index]++, 1) : 0));
+  await worker.emit('train', canvas.data, expected);
+  enableControls(true);
+  console.log('Done!');
+  updateCounters();
 });
 
 /**
@@ -88,24 +102,6 @@ trainButton.addEventListener('click', () => {
  */
 clearButton.addEventListener('click', () => {
   canvas.clear();
-});
-
-/**
- * Register the trained worker listener.
- */
-worker.listen('trained', () => {
-  updateCounters();
-  console.log('Done!');
-});
-
-/**
- * Register the predicted worker listener.
- */
-worker.listen('predicted', (...values: WorkerValueTypes[]) => {
-  const [outputs] = values as [number[]];
-  updateAnswer(outputs);
-  updateOutputs(outputs);
-  console.log('Done!');
 });
 
 /**
