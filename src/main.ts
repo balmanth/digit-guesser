@@ -92,9 +92,12 @@ trainButton.addEventListener('click', async (): Promise<void> => {
   enableControls(false);
   const expected = inputElements.map((input, index) => (input.checked ? (counters[index]++, 1) : 0));
   await worker.emit('train', canvas.data, expected);
+  const [outputs] = (await worker.emit('predict', canvas.data)) as [number[]];
   enableControls(true);
-  console.log('Done!');
+  updateOutputs(outputs);
+  updateAnswer(outputs);
   updateCounters();
+  console.log('Done!');
 });
 
 /**
