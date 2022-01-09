@@ -240,13 +240,9 @@ export class Matrix {
    * @param type Optional matrix type.
    * @returns Returns the new matrix.
    */
-  static fromArray(
-    array: MatrixArrayTypes | number[],
-    columns: number = 1,
-    type: MatrixConstructor = Float32Array
-  ): Matrix {
-    const result = new Matrix(array.length / columns, columns, type);
-    if (!(array instanceof type)) {
+  static fromArray(array: MatrixArrayTypes | number[], columns?: number, type?: MatrixConstructor): Matrix {
+    const result = new Matrix(array.length / (columns ?? 1), columns ?? 1, type ?? Float32Array);
+    if (!(array instanceof result.type)) {
       result.fill((row, column) => array[this.getOffset(result, row, column)]);
     } else {
       result.#data.set(array);
