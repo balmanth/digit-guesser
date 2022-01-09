@@ -59,11 +59,11 @@ export class Matrix {
    * @param columns Number of columns.
    * @param type Matrix type.
    */
-  constructor(rows: number, columns: number, type: MatrixConstructor = Float32Array) {
+  constructor(rows: number, columns: number, type?: MatrixConstructor) {
     this.#rows = Math.trunc(rows);
     this.#columns = Math.trunc(columns);
-    this.#data = new type(this.#rows * this.#columns);
-    this.#type = type;
+    this.#type = type ?? Float32Array;
+    this.#data = new this.#type(this.#rows * this.#columns);
   }
 
   /**
