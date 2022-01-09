@@ -1,6 +1,7 @@
 import { Matrix, MatrixArrayTypes } from '../core/matrix';
+import { NeuralFunction } from './function';
+import { NeuralSigmoidFunction } from './functions/sigmoid';
 import { NeuralLayer } from './layer';
-import { NeuralMath } from './math';
 
 /**
  * All neural input types.
@@ -17,6 +18,11 @@ export class NeuralNetwork {
   #layers: NeuralLayer[] = [];
 
   /**
+   * Default activation function.
+   */
+  #activation: NeuralFunction;
+
+  /**
    * Learning rate.
    */
   #rate: number;
@@ -29,7 +35,7 @@ export class NeuralNetwork {
     let last;
     for (const neurons of layers) {
       if (last !== void 0) {
-        const layer = new NeuralLayer(neurons, last);
+        const layer = new NeuralLayer(neurons, last, this.#activation);
         this.#layers.push(layer);
       }
       last = neurons;
@@ -78,17 +84,25 @@ export class NeuralNetwork {
    * @returns Returns a new matrix containing the results.
    */
   #gradientDescent(input: Matrix, errors: Matrix): Matrix {
-    return this.#scalarMultiply(this.#hadamardMultiply(input.map(NeuralMath.deltaSigmoid), errors), this.#rate);
+    return this.#scalarMultiply(
+      this.#hadamardMultiply(
+        input.map((value) => this.#activation.derivative(value)),
+        errors
+      ),
+      this.#rate
+    );
   }
 
   /**
    * Default constructor.
    * @param layers Array containing the max number of neurons per layer.
-   * @param rate Learning rate.
+   * @param rate Optional learning rate.
+   * @param activation Optional default activation function.
    */
-  constructor(layers: number[], rate: number = 0.1) {
+  constructor(layers: number[], rate?: number, activation?: NeuralFunction) {
+    this.#activation = activation ?? new NeuralSigmoidFunction();
+    this.#rate = rate ?? 0.1;
     this.#initialize(layers);
-    this.#rate = rate;
   }
 
   /**
@@ -122,6 +136,13 @@ export class NeuralNetwork {
   }
 
   /**
+   * Get the default activation function.
+   */
+  get activation(): NeuralFunction {
+    return this.#activation;
+  }
+
+  /**
    * Get the learning rate.
    */
   get rate(): number {
@@ -135,11 +156,9 @@ export class NeuralNetwork {
    * @returns Returns the generated neural network.
    */
   static fromCrossover(network1: NeuralNetwork, network2: NeuralNetwork): NeuralNetwork {
-    const result = new NeuralNetwork([], (network1.rate + network2.rate) / 2);
-    const layers1 = network1.#layers;
-    const layers2 = network2.#layers;
-    for (let index = 0; index < layers1.length; ++index) {
-      const layer = NeuralLayer.fromCrossover(layers1[index], layers2[index]);
+    const result = new NeuralNetwork([], (network1.rate + network2.rate) / 2, network1.#activation);
+    for (let index = 0; index < network1.#layers.length; ++index) {
+      const layer = NeuralLayer.fromCrossover(network1.#layers[index], network2.#layers[index]);
       result.#layers.push(layer);
     }
     return result;
@@ -148,11 +167,12 @@ export class NeuralNetwork {
   /**
    * Create a new neural network filled with random values.
    * @param layers Array containing the max number of neurons per layer.
-   * @param rate Learning rate.
+   * @param rate Optional learning rate.
+   * @param activation Optional activation function.
    * @returns Returns the generated neural network.
    */
-  static fromRandom(layers: number[], rate: number = 0.1): NeuralNetwork {
-    const result = new NeuralNetwork(layers, rate);
+  static fromRandom(layers: number[], rate?: number, activation?: NeuralFunction): NeuralNetwork {
+    const result = new NeuralNetwork(layers, rate, activation);
     for (const layer of result.#layers) {
       NeuralLayer.randomize(layer, -1, 1);
     }

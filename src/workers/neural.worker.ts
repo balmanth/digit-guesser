@@ -1,9 +1,11 @@
 import { NeuralNetwork } from '../neural/network';
 import { Worker } from '../core/worker';
+import { NeuralSigmoidFunction } from '../neural/functions/sigmoid';
 
 export default null as any;
 
-const neural = NeuralNetwork.fromRandom([225, 120, 60, 6]);
+const activation = new NeuralSigmoidFunction();
+const network = NeuralNetwork.fromRandom([225, 120, 60, 6], 0.1, activation);
 const worker = new Worker(self);
 
 /**
@@ -12,8 +14,9 @@ const worker = new Worker(self);
 worker.listen('train', (...values): void => {
   const [source, target] = values as [number[], number[]];
   for (let rounds = 0; rounds < 1000; ++rounds) {
-    neural.train(source, target);
+    network.train(source, target);
   }
+  console.log(network);
 });
 
 /**
@@ -21,6 +24,6 @@ worker.listen('train', (...values): void => {
  */
 worker.listen('predict', (...values): number[] => {
   const [inputs] = values as [number[]];
-  const outputs = neural.predict(inputs);
+  const outputs = network.predict(inputs);
   return outputs;
 });

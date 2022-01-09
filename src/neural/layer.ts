@@ -1,4 +1,5 @@
 import { Matrix } from '../core/matrix';
+import { NeuralFunction } from './function';
 import { NeuralMath } from './math';
 
 /**
@@ -16,6 +17,11 @@ export class NeuralLayer {
   #output: number;
 
   /**
+   * Activation function.
+   */
+  #activation: NeuralFunction;
+
+  /**
    * Layer weight.
    */
   #weight: Matrix;
@@ -29,10 +35,12 @@ export class NeuralLayer {
    * Default constructor.
    * @param input Input neurons.
    * @param output Output neurons.
+   * @param activation Activation function.
    */
-  constructor(input: number, output: number) {
+  constructor(input: number, output: number, activation: NeuralFunction) {
     this.#input = Math.trunc(input);
     this.#output = Math.trunc(output);
+    this.#activation = activation;
     this.#weight = new Matrix(this.#input, this.#output, Float32Array);
     this.#bias = new Matrix(this.#input, 1, Float32Array);
   }
@@ -43,7 +51,10 @@ export class NeuralLayer {
    * @returns Returns a new matrix containing the results.
    */
   process(input: Matrix): Matrix {
-    return this.#weight.multiply(input).add(this.#bias).map(NeuralMath.sigmoid);
+    return this.#weight
+      .multiply(input)
+      .add(this.#bias)
+      .map((value) => this.#activation.generate(value));
   }
 
   /**
@@ -152,17 +163,17 @@ export class NeuralLayer {
    * Create a new layer based on crossover of the given layers.
    * @param layer1 Input layer 1.
    * @param layer2 Input layer 2.
-   * @returns Returns the new layer.
+   * @returns Returns the generated layer.
    */
   static fromCrossover(layer1: NeuralLayer, layer2: NeuralLayer): NeuralLayer {
-    const result = new NeuralLayer(layer1.#input, layer1.#output);
+    const result = new NeuralLayer(layer1.#input, layer1.#output, layer1.#activation);
     this.#crossBias(result.bias, layer1.bias, layer2.bias);
     this.#crossWeight(result.weight, layer1.weight, layer2.weight);
     return result;
   }
 
   /**
-   * Randomize the bias and wights for the given layer.
+   * Randomize the bias and weights for the given layer.
    * @param layer Input layer.
    * @param min Min random value.
    * @param max Max random value.

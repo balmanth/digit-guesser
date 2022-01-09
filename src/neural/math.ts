@@ -1,7 +1,7 @@
 /**
  * Neural math class.
  */
-export class NeuralMath {
+ export class NeuralMath {
   /**
    * Get a random number between the min and max values.
    * @param min Min value.
@@ -26,23 +26,5 @@ export class NeuralMath {
       values.add(Math.trunc(number));
     } while (values.size < size);
     return [...values];
-  }
-
-  /**
-   * Get the corresponding value for the Sigmoid function.
-   * @param value Input value.
-   * @returns Returns the resulting value.
-   */
-  static sigmoid(value: number): number {
-    return 1 / (1 + Math.exp(-value));
-  }
-
-  /**
-   * Get the corresponding delta value for the Sigmoid function.
-   * @param value Input value.
-   * @returns Returns the resulting value.
-   */
-  static deltaSigmoid(value: number): number {
-    return value * (1 - value);
   }
 }
